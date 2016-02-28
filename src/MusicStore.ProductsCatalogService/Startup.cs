@@ -1,12 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNet.Builder;
+﻿using Microsoft.AspNet.Builder;
 using Microsoft.AspNet.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
+using MusicStore.Models;
+using Microsoft.Data.Entity;
 
 namespace MusicStore.ProductsCatalogService
 {
@@ -16,7 +14,7 @@ namespace MusicStore.ProductsCatalogService
         {
             // Set up configuration sources.
             var builder = new ConfigurationBuilder()
-                .AddJsonFile("appsettings.json")
+                .AddJsonFile("config.json")
                 .AddEnvironmentVariables();
             Configuration = builder.Build();
         }
@@ -28,16 +26,27 @@ namespace MusicStore.ProductsCatalogService
         {
             // Add framework services.
             services.AddMvc();
+
+            services.AddEntityFramework()
+                        .AddSqlServer()
+                        .AddDbContext<MusicStoreContext>(options =>
+                            options.UseSqlServer(Configuration["Data:DefaultConnection:ConnectionString"]));
+
+            services.AddCors(options =>
+            {
+                options.AddPolicy("CorsPolicy", builder =>
+                {
+                    builder.WithOrigins("http://example.com");
+                });
+            });
+
+            // Add memory cache services
+            services.AddCaching();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IHostingEnvironment env, ILoggerFactory loggerFactory)
         {
-            loggerFactory.AddConsole(Configuration.GetSection("Logging"));
-            loggerFactory.AddDebug();
-
-            app.UseIISPlatformHandler();
-
             app.UseStaticFiles();
 
             app.UseMvc();

@@ -10,7 +10,7 @@ namespace MusicStore.Models
     public class ShoppingCart
     {
         private readonly MusicStoreContext _dbContext;
-        private string ShoppingCartId { get; set; }
+        public string ShoppingCartId { get; set; }
 
         public ShoppingCart(MusicStoreContext dbContext)
         {
@@ -20,7 +20,15 @@ namespace MusicStore.Models
         public static ShoppingCart GetCart(MusicStoreContext db, HttpContext context)
         {
             var cart = new ShoppingCart(db);
-            cart.ShoppingCartId = cart.GetCartId(context);
+            string shoppingCartId = cart.GetCartId(context);
+
+            return ShoppingCart.GetCart(db, shoppingCartId);
+        }
+
+        public static ShoppingCart GetCart(MusicStoreContext db, string shoppingCartId)
+        {
+            var cart = new ShoppingCart(db);
+            cart.ShoppingCartId = shoppingCartId;
             return cart;
         }
 

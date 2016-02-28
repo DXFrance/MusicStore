@@ -7,6 +7,7 @@ using Microsoft.AspNet.Authorization;
 using Microsoft.AspNet.Mvc;
 using Microsoft.Data.Entity;
 using MusicStore.Models;
+using System.Net.Http;
 
 namespace MusicStore.Controllers
 {
@@ -17,6 +18,9 @@ namespace MusicStore.Controllers
 
         [FromServices]
         public MusicStoreContext DbContext { get; set; }
+
+        [FromServices]
+        public AppSettings AppSettings { get; set; }
 
         //
         // GET: /Checkout/
@@ -49,18 +53,19 @@ namespace MusicStore.Controllers
                 else
                 {
                     order.Username = HttpContext.User.GetUserName();
-                    order.OrderDate = DateTime.Now;
 
-                    //Add the Order
-                    DbContext.Orders.Add(order);
-
-                    //Process the order
+                    // todo : next step is to move shopping cart into another micro service
                     var cart = ShoppingCart.GetCart(DbContext, HttpContext);
-                    await cart.CreateOrder(order);
+                    var cartId = cart.ShoppingCartId;
 
-                    // Save all changes
-                    await DbContext.SaveChangesAsync(requestAborted);
+                    // get the checkout service URL through service discovery
+                    var serviceDiscoveryClient = new Services.ServiceDiscoveryClient(AppSettings.ServiceDiscoveryBaseUrl);
+                    string checkoutServiceUrl = await serviceDiscoveryClient.GetCheckoutServiceUrlAsync();
 
+                    // post the order to checkout service for the shopping cart id
+                    var checkoutService = new Services.CheckoutServiceClient(checkoutServiceUrl);
+                    order.OrderId = await checkoutService.PostOrderAsync(order, cartId);
+                    
                     return RedirectToAction("Complete", new { id = order.OrderId });
                 }
             }

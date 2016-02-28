@@ -6,7 +6,7 @@ namespace MusicStore.ServiceDiscovery.Controllers
     public class ServicesController : Controller
     {
         // move these values into database instead of hardcoded
-        private static string CheckoutServiceUrl = "http://localhost:5002";
+        private static string CheckoutServiceUrl = "http://localhost:5004";
         private static string ProductsCatalogServiceUrl = "http://localhost:5003";
 
         /// <summary>

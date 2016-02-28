@@ -1,5 +1,4 @@
 using Microsoft.AspNet.Builder;
-using Microsoft.AspNet.Diagnostics.Entity;
 using Microsoft.AspNet.Identity.EntityFramework;
 using Microsoft.Data.Entity;
 using Microsoft.Extensions.PlatformAbstractions;
@@ -36,25 +35,31 @@ namespace MusicStore
         {
             services.Configure<AppSettings>(Configuration.GetSection("AppSettings"));
 
-            var useInMemoryStore = !_platform.IsRunningOnWindows
-                || _platform.IsRunningOnMono
-                || _platform.IsRunningOnNanoServer;
+            //var useInMemoryStore = !_platform.IsRunningOnWindows
+            //    || _platform.IsRunningOnMono
+            //    || _platform.IsRunningOnNanoServer;
 
-            // Add EF services to the services container
-            if (useInMemoryStore)
-            {
-                services.AddEntityFramework()
-                        .AddInMemoryDatabase()
-                        .AddDbContext<MusicStoreContext>(options =>
-                            options.UseInMemoryDatabase());
-            }
-            else
-            {
-                services.AddEntityFramework()
+            //// Add EF services to the services container
+            //if (useInMemoryStore)
+            //{
+            //    services.AddEntityFramework()
+            //            .AddInMemoryDatabase()
+            //            .AddDbContext<MusicStoreContext>(options =>
+            //                options.UseInMemoryDatabase());
+            //}
+            //else
+            //{
+            //    services.AddEntityFramework()
+            //            .AddSqlServer()
+            //            .AddDbContext<MusicStoreContext>(options =>
+            //                options.UseSqlServer(Configuration["Data:DefaultConnection:ConnectionString"]));
+            //}
+
+            // Add entity framework & sql server
+            services.AddEntityFramework()
                         .AddSqlServer()
                         .AddDbContext<MusicStoreContext>(options =>
                             options.UseSqlServer(Configuration["Data:DefaultConnection:ConnectionString"]));
-            }
 
             // Add Identity services to the services container
             services.AddIdentity<ApplicationUser, IdentityRole>(options =>
@@ -176,29 +181,6 @@ namespace MusicStore
                 options.ConsumerSecret = "fpo0oWRNc3vsZKlZSq1PyOSoeXlJd7NnG4Rfc94xbFXsdcc3nH";
             });
 
-            // The MicrosoftAccount service has restrictions that prevent the use of
-            // http://localhost:5001/ for test applications.
-            // As such, here is how to change this sample to uses http://ktesting.com:5001/ instead.
-
-            // Edit the Project.json file and replace http://localhost:5001/ with http://ktesting.com:5001/.
-
-            // From an admin command console first enter:
-            // notepad C:\Windows\System32\drivers\etc\hosts
-            // and add this to the file, save, and exit (and reboot?):
-            // 127.0.0.1 ktesting.com
-
-            // Then you can choose to run the app as admin (see below) or add the following ACL as admin:
-            // netsh http add urlacl url=http://ktesting:5001/ user=[domain\user]
-
-            // The sample app can then be run via:
-            // dnx . web
-            app.UseMicrosoftAccountAuthentication(options =>
-            {
-                options.DisplayName = "MicrosoftAccount - Requires project changes";
-                options.ClientId = "000000004012C08A";
-                options.ClientSecret = "GaMQ2hCnqAC6EcDLnXsAeBVIJOLmeutL";
-            });
-
             // Add MVC to the request pipeline
             app.UseMvc(routes =>
             {
@@ -218,7 +200,7 @@ namespace MusicStore
             });
 
             //Populates the MusicStore sample data
-            SampleData.InitializeMusicStoreDatabaseAsync(app.ApplicationServices).Wait();
+            //SampleData.InitializeMusicStoreDatabaseAsync(app.ApplicationServices).Wait();
         }
     }
 }

@@ -1,6 +1,7 @@
 ﻿{
     "AppSettings": {
-        "SiteTitle": "ASP.NET MVC Music Store"
+      "SiteTitle": "ASP.NET MVC Music Store",
+      "ServiceDiscoveryBaseUrl": "http://localhost:5001/api/services"
     },
     "DefaultAdminUsername": "Administrator@test.com",
     "DefaultAdminPassword": "YouShouldChangeThisPassword1!",
