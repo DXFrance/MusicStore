@@ -7,7 +7,7 @@ using Microsoft.AspNet.Authorization;
 using Microsoft.AspNet.Mvc;
 using Microsoft.Data.Entity;
 using MusicStore.Models;
-using System.Net.Http;
+using Microsoft.Extensions.Logging;
 
 namespace MusicStore.Controllers
 {
@@ -21,6 +21,13 @@ namespace MusicStore.Controllers
 
         [FromServices]
         public AppSettings AppSettings { get; set; }
+
+        private Microsoft.Extensions.Logging.ILogger _logger;
+
+        public CheckoutController(ILoggerFactory loggerFactory)
+        {
+            _logger = loggerFactory.CreateLogger<CheckoutController>();
+        }
 
         //
         // GET: /Checkout/
@@ -45,8 +52,8 @@ namespace MusicStore.Controllers
 
             try
             {
-                if (string.Equals(formCollection["PromoCode"].FirstOrDefault(), PromoCode,
-                    StringComparison.OrdinalIgnoreCase) == false)
+                string promoCode = formCollection["PromoCode"].FirstOrDefault();
+                if (!string.IsNullOrEmpty(promoCode) && !string.Equals(promoCode, PromoCode, StringComparison.OrdinalIgnoreCase))
                 {
                     return View(order);
                 }
@@ -62,6 +69,8 @@ namespace MusicStore.Controllers
                     var serviceDiscoveryClient = new Services.ServiceDiscoveryClient(AppSettings.ServiceDiscoveryBaseUrl);
                     string checkoutServiceUrl = await serviceDiscoveryClient.GetCheckoutServiceUrlAsync();
 
+                    _logger.LogInformation("Service URL : {0}", checkoutServiceUrl);
+
                     // post the order to checkout service for the shopping cart id
                     var checkoutService = new Services.CheckoutServiceClient(checkoutServiceUrl);
                     order.OrderId = await checkoutService.PostOrderAsync(order, cartId);
@@ -71,7 +80,6 @@ namespace MusicStore.Controllers
             }
             catch
             {
-                //Invalid - redisplay with errors
                 return View(order);
             }
         }

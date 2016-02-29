@@ -12,34 +12,18 @@ namespace MusicStore.Controllers
     public class HomeController : Controller
     {
         [FromServices]
-        public MusicStoreContext DbContext { get; set; }
-
-        [FromServices]
-        public IMemoryCache Cache { get; set; }
+        public AppSettings AppSettings { get; set; }
 
         //
         // GET: /Home/
         public async Task<IActionResult> Index()
         {
-            // Get most popular albums
-            var cacheKey = "topselling";
-            List<Album> albums;
-            if(!Cache.TryGetValue(cacheKey, out albums))
-            {
-                albums = await GetTopSellingAlbumsAsync(6);
+            var serviceDiscoveryClient = new Services.ServiceDiscoveryClient(this.AppSettings.ServiceDiscoveryBaseUrl);
 
-                if (albums != null && albums.Count > 0)
-                {
-                    // Refresh it every 10 minutes.
-                    // Let this be the last item to be removed by cache if cache GC kicks in.
-                    Cache.Set(
-                        cacheKey,
-                        albums,
-                        new MemoryCacheEntryOptions()
-                            .SetAbsoluteExpiration(TimeSpan.FromMinutes(10))
-                            .SetPriority(CacheItemPriority.High));
-                }
-            }
+            string productsCatalogServiceUrl = await serviceDiscoveryClient.GetProductsCatalogServiceUrlAsync();
+            var productsCatalogClient = new Services.ProductsCatalogClient(productsCatalogServiceUrl);
+
+            var albums = await productsCatalogClient.GetTopSellingAlbumsAsync(6);
 
             return View(albums);
         }
@@ -57,18 +41,6 @@ namespace MusicStore.Controllers
         public IActionResult AccessDenied()
         {
             return View("~/Views/Shared/AccessDenied.cshtml");
-        }
-
-        private async Task<List<Album>> GetTopSellingAlbumsAsync(int count)
-        {
-            // Group the order details by album and return
-            // the albums with the highest count
-
-            // TODO [EF] We don't query related data as yet, so the OrderByDescending isn't doing anything
-            return await DbContext.Albums
-                .OrderByDescending(a => a.OrderDetails.Count())
-                .Take(count)
-                .ToListAsync();
         }
     }
 }

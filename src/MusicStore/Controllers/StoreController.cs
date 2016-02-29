@@ -5,23 +5,32 @@ using Microsoft.AspNet.Mvc;
 using Microsoft.Data.Entity;
 using Microsoft.Extensions.Caching.Memory;
 using MusicStore.Models;
+using Microsoft.Extensions.Logging;
 
 namespace MusicStore.Controllers
 {
     public class StoreController : Controller
     {
         [FromServices]
-        public MusicStoreContext DbContext { get; set; }
+        public AppSettings AppSettings { get; set; }
+        
+        private ILogger _logger;
 
-        [FromServices]
-        public IMemoryCache Cache { get; set; }
+        public StoreController(ILoggerFactory loggerFactory)
+        {
+            _logger = loggerFactory.CreateLogger<StoreController>();
+        }
 
         //
         // GET: /Store/
         public async Task<IActionResult> Index()
         {
-            var genres = await DbContext.Genres.ToListAsync();
+            var serviceDiscoveryClient = new Services.ServiceDiscoveryClient(this.AppSettings.ServiceDiscoveryBaseUrl);
 
+            string productsCatalogServiceUrl = await serviceDiscoveryClient.GetProductsCatalogServiceUrlAsync();
+            var productsCatalogClient = new Services.ProductsCatalogClient(productsCatalogServiceUrl);
+
+            var genres = await productsCatalogClient.GetGenresAsync();
             return View(genres);
         }
 
@@ -29,46 +38,26 @@ namespace MusicStore.Controllers
         // GET: /Store/Browse?genre=Disco
         public async Task<IActionResult> Browse(string genre)
         {
-            // Retrieve Genre genre and its Associated associated Albums albums from database
-            var genreModel = await DbContext.Genres
-                .Include(g => g.Albums)
-                .Where(g => g.Name == genre)
-                .FirstOrDefaultAsync();
+            var serviceDiscoveryClient = new Services.ServiceDiscoveryClient(this.AppSettings.ServiceDiscoveryBaseUrl);
 
-            if (genreModel == null)
-            {
-                return HttpNotFound();
-            }
+            string productsCatalogServiceUrl = await serviceDiscoveryClient.GetProductsCatalogServiceUrlAsync();
+            var productsCatalogClient = new Services.ProductsCatalogClient(productsCatalogServiceUrl);
+
+            var genreModel = await productsCatalogClient.BrowseByGenreAsync(genre);
 
             return View(genreModel);
         }
 
         public async Task<IActionResult> Details(int id)
         {
-            var cacheKey = string.Format("album_{0}", id);
-            Album album;
-            if(!Cache.TryGetValue(cacheKey, out album))
-            {
-                album = await DbContext.Albums
-                                .Where(a => a.AlbumId == id)
-                                .Include(a => a.Artist)
-                                .Include(a => a.Genre)
-                                .FirstOrDefaultAsync();
+            var serviceDiscoveryClient = new Services.ServiceDiscoveryClient(this.AppSettings.ServiceDiscoveryBaseUrl);
 
-                if (album != null)
-                {
-                    //Remove it from cache if not retrieved in last 10 minutes
-                    Cache.Set(
-                        cacheKey,
-                        album,
-                        new MemoryCacheEntryOptions().SetSlidingExpiration(TimeSpan.FromMinutes(10)));
-                }
-            }
+            string productsCatalogServiceUrl = await serviceDiscoveryClient.GetProductsCatalogServiceUrlAsync();
+            var productsCatalogClient = new Services.ProductsCatalogClient(productsCatalogServiceUrl);
 
-            if (album == null)
-            {
-                return HttpNotFound();
-            }
+            _logger.LogInformation("Service URL : {0}", productsCatalogServiceUrl);
+
+            var album = await productsCatalogClient.GetAlbumDetails(id);
 
             return View(album);
         }

@@ -35,6 +35,12 @@ namespace MusicStore
         {
             services.Configure<AppSettings>(Configuration.GetSection("AppSettings"));
 
+            var appSettings = Configuration.Get<AppSettings>("AppSettings");
+            services.AddSingleton<AppSettings>(serviceProvider =>
+            {
+                return appSettings;
+            });
+
             //var useInMemoryStore = !_platform.IsRunningOnWindows
             //    || _platform.IsRunningOnMono
             //    || _platform.IsRunningOnNanoServer;
@@ -142,7 +148,7 @@ namespace MusicStore
         //The allowed values are Development,Staging and Production
         public void ConfigureProduction(IApplicationBuilder app, ILoggerFactory loggerFactory)
         {
-            loggerFactory.AddConsole(minLevel: LogLevel.Warning);
+            loggerFactory.AddConsole(minLevel: LogLevel.Verbose);
 
             // StatusCode pages to gracefully handle status codes 400-599.
             app.UseStatusCodePagesWithRedirects("~/Home/StatusCodePage");
