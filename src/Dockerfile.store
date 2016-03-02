@@ -1,0 +1,18 @@
+FROM microsoft/aspnet:1.0.0-rc1-final-coreclr
+
+EXPOSE 5000
+ENTRYPOINT ["dnx", "web"]
+
+WORKDIR /app/MusicStore.Models
+COPY MusicStore.Models/project.json .
+RUN dnu restore
+
+ADD MusicStore.Models/ ./
+RUN dnu build
+
+WORKDIR /app/MusicStore
+COPY MusicStore/project.json .
+RUN dnu restore
+
+ADD MusicStore/ ./
+RUN dnu build
