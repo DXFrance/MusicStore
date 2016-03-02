@@ -15,14 +15,12 @@ namespace MusicStore.Services
 
         public async Task<string> GetCheckoutServiceUrlAsync()
         {
-            string requestUrl = string.Concat(this.BaseServiceUrl, "/checkout");
-            return await base.HttpClient.GetStringAsync(requestUrl);
+            return await Task.FromResult("http://checkout:5004/api/checkout");
         }
 
         public async Task<string> GetProductsCatalogServiceUrlAsync()
         {
-            string requestUrl = string.Concat(this.BaseServiceUrl, "/products_catalog");
-            return await base.HttpClient.GetStringAsync(requestUrl);
+            return await Task.FromResult("http://catalog:5003/api/productsCatalog");
         }
     }
 }
