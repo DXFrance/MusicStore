@@ -41,6 +41,8 @@
     "Microsoft.Extensions.Configuration.EnvironmentVariables": "1.0.0-rc1-final",
     "Microsoft.Extensions.Configuration.Json": "1.0.0-rc1-final",
     "Microsoft.Extensions.Logging.Console": "1.0.0-rc1-final",
+    "System.Data.SqlClient": "4.0.0-beta-23516",
+    "System.Net.Security": "4.0.0-beta-23516",
     "MusicStore.Models": "1.0.0-*"
   },
   "commands": {
