@@ -3,7 +3,8 @@
     "DefaultConnection": {
       // Use a shared (and running) LocalDB database when executing in IIS e.g.
       // "Server=(localdb)\\.\\IIS_DB;Database=MusicStore;Trusted_Connection=False;MultipleActiveResultSets=true;User ID=iis_login;Password=********"
-      "Connectionstring": "Server=(localdb)\\MSSQLLocalDB;Database=MusicStore;Trusted_Connection=True;MultipleActiveResultSets=true"
+      //"Connectionstring": "Server=(localdb)\\MSSQLLocalDB;Database=MusicStore;Trusted_Connection=True;MultipleActiveResultSets=true"
+      "Connectionstring":"Server=tcp:musicstore-dbserver.database.windows.net,1433;Database=MusicStore;User ID=jcorioland@musicstore-dbserver;Password=P@ssw0rd!;Encrypt=True;TrustServerCertificate=False;Connection Timeout=30;"
     }
   }
 }
