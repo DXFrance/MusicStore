@@ -1,0 +1,16 @@
+listenAddr = ":8080"
+dockerURL = "tcp://192.168.99.101:3376"
+TLSCACert = "/certs/ca.pem"
+TLSCert = "/certs/cert.pem"
+TLSKey = "/certs/key.pem"
+AllowInsecure = false
+EnableMetrics = true
+
+[[extensions]]
+name = "haproxy"
+configPath = "/etc/haproxy.cfg"
+pidPath = "/etc/haproxy.pid"
+maxConn = 1024
+port = 80
+adminUser = "admin"
+adminPass = "interlock"

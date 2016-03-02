@@ -15,7 +15,7 @@ namespace MusicStore.Services
 
         public async Task<string> GetCheckoutServiceUrlAsync()
         {
-            return await Task.FromResult("http://checkout:5004/api/checkout");
+            return await Task.FromResult("http://checkout.local:5004/api/checkout");
         }
 
         public async Task<string> GetProductsCatalogServiceUrlAsync()
