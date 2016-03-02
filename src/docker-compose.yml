@@ -1,0 +1,18 @@
+store:
+  build: .
+  dockerfile: Dockerfile.store
+  ports:
+    - "5000:5000"
+  links:
+    - checkout
+    - catalog
+checkout:
+  build: .
+  dockerfile: Dockerfile.checkout
+  ports:
+    - "5004:5004"
+catalog:
+  build: .
+  dockerfile: Dockerfile.catalog
+  ports:
+    - "5003:5003"
