@@ -20,16 +20,14 @@ namespace MusicStore.Components
         public async Task<IViewComponentResult> InvokeAsync()
         {
             var genres = await GetGenres();
-
             return View(genres);
         }
 
         private async Task<List<Genre>> GetGenres()
         {
-            var serviceDiscoveryClient = new Services.ServiceDiscoveryClient("");
+            var serviceRegistry = new Services.ServiceRegistry();
 
-            string productsCatalogServiceUrl = await serviceDiscoveryClient.GetProductsCatalogServiceUrlAsync();
-            var productsCatalogClient = new Services.ProductsCatalogClient(productsCatalogServiceUrl);
+            var productsCatalogClient = new Services.ProductsCatalogClient(serviceRegistry.GetProductsCatalogServiceUrl());
 
             var genres = await productsCatalogClient.GetGenresAsync();
             return genres.ToList();

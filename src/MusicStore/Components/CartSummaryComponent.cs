@@ -27,13 +27,11 @@ namespace MusicStore.Components
 
         private async Task<IOrderedEnumerable<string>> GetCartItems()
         {
-            //var cart = ShoppingCart.GetCart(DbContext, HttpContext);
+            var cart = ShoppingCart.GetCart(DbContext, HttpContext);
 
-            //return (await cart.GetCartItems())
-            //    .Select(a => a.Album.Title)
-            //    .OrderBy(x => x);
-
-            return await Task.FromResult(Enumerable.Empty<string>().OrderBy(s => s));
+            return (await cart.GetCartItems())
+               .Select(a => a.Album.Title)
+               .OrderBy(x => x);
         }
     }
 }
