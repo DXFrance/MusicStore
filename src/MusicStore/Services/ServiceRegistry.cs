@@ -10,7 +10,7 @@ namespace MusicStore.Services
     {
         public string GetCheckoutServiceUrl()
         {
-            return "http://checkout:5004/api/checkout";
+            return "http://checkout.local:5004/api/checkout";
         }
 
         public string GetProductsCatalogServiceUrl()
