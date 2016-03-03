@@ -20,22 +20,17 @@ namespace MusicStore.Components
         public async Task<IViewComponentResult> InvokeAsync()
         {
             var genres = await GetGenres();
-
             return View(genres);
         }
 
         private async Task<List<Genre>> GetGenres()
         {
-            // TODO [EF] We don't query related data as yet, so the OrderByDescending isn't doing anything
-            //var genres = _dbContext.Genres
-            //.OrderByDescending(
-            //    g => g.Albums.Sum(
-            //    a => a.OrderDetails.Sum(
-            //    od => od.Quantity)))
-            //.Take(9)
-            //.ToList();
+            var serviceRegistry = new Services.ServiceRegistry();
 
-            return await DbContext.Genres.Take(9).ToListAsync();
+            var productsCatalogClient = new Services.ProductsCatalogClient(serviceRegistry.GetProductsCatalogServiceUrl());
+
+            var genres = await productsCatalogClient.GetGenresAsync();
+            return genres.ToList();
         }
     }
 }

@@ -1,0 +1,4 @@
+haproxy.cfg
+hostname
+hosts
+resolv.conf

@@ -66,13 +66,10 @@ namespace MusicStore.Controllers
                     var cartId = cart.ShoppingCartId;
 
                     // get the checkout service URL through service discovery
-                    var serviceDiscoveryClient = new Services.ServiceDiscoveryClient(AppSettings.ServiceDiscoveryBaseUrl);
-                    string checkoutServiceUrl = await serviceDiscoveryClient.GetCheckoutServiceUrlAsync();
-
-                    _logger.LogInformation("Service URL : {0}", checkoutServiceUrl);
+                    var serviceRegistry = new Services.ServiceRegistry();
 
                     // post the order to checkout service for the shopping cart id
-                    var checkoutService = new Services.CheckoutServiceClient(checkoutServiceUrl);
+                    var checkoutService = new Services.CheckoutServiceClient(serviceRegistry.GetCheckoutServiceUrl());
                     order.OrderId = await checkoutService.PostOrderAsync(order, cartId);
                     
                     return RedirectToAction("Complete", new { id = order.OrderId });

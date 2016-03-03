@@ -1,4 +1,6 @@
 ﻿{
+  "DefaultAdminUsername": "Administrator@test.com",
+  "DefaultAdminPassword": "YouShouldChangeThisPassword1!",
   "Data": {
     "DefaultConnection": {
       // Use a shared (and running) LocalDB database when executing in IIS e.g.
