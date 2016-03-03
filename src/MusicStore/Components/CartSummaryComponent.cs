@@ -30,8 +30,8 @@ namespace MusicStore.Components
             var cart = ShoppingCart.GetCart(DbContext, HttpContext);
 
             return (await cart.GetCartItems())
-                .Select(a => a.Album.Title)
-                .OrderBy(x => x);
+               .Select(a => a.Album.Title)
+               .OrderBy(x => x);
         }
     }
 }

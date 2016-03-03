@@ -15,11 +15,15 @@
     "Microsoft.Extensions.Logging": "1.0.0-rc1-final",
     "Microsoft.Extensions.Logging.Console": "1.0.0-rc1-final",
     "Microsoft.Extensions.Logging.Debug": "1.0.0-rc1-final",
+    "System.Data.SqlClient": "4.0.0-beta-23516",
+    "System.Net.Security": "4.0.0-beta-23516",
+    "EntityFramework.InMemory": "7.0.0-rc1-final",
+    "EntityFramework.MicrosoftSqlServer": "7.0.0-rc1-final",
     "MusicStore.Models": "1.0.0-*"
   },
 
   "commands": {
-    "web": "Microsoft.AspNet.Server.Kestrel --server.urls http://localhost:5003"
+    "web": "Microsoft.AspNet.Server.Kestrel --server.urls http://0.0.0.0:5003"
   },
 
   "frameworks": {

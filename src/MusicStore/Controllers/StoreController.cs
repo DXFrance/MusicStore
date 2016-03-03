@@ -25,9 +25,9 @@ namespace MusicStore.Controllers
         // GET: /Store/
         public async Task<IActionResult> Index()
         {
-            var serviceDiscoveryClient = new Services.ServiceDiscoveryClient(this.AppSettings.ServiceDiscoveryBaseUrl);
+            var serviceRegistry = new Services.ServiceRegistry();
 
-            string productsCatalogServiceUrl = await serviceDiscoveryClient.GetProductsCatalogServiceUrlAsync();
+            string productsCatalogServiceUrl = serviceRegistry.GetProductsCatalogServiceUrl();
             var productsCatalogClient = new Services.ProductsCatalogClient(productsCatalogServiceUrl);
 
             var genres = await productsCatalogClient.GetGenresAsync();
@@ -38,9 +38,9 @@ namespace MusicStore.Controllers
         // GET: /Store/Browse?genre=Disco
         public async Task<IActionResult> Browse(string genre)
         {
-            var serviceDiscoveryClient = new Services.ServiceDiscoveryClient(this.AppSettings.ServiceDiscoveryBaseUrl);
+            var serviceRegistry = new Services.ServiceRegistry();
 
-            string productsCatalogServiceUrl = await serviceDiscoveryClient.GetProductsCatalogServiceUrlAsync();
+            string productsCatalogServiceUrl = serviceRegistry.GetProductsCatalogServiceUrl();
             var productsCatalogClient = new Services.ProductsCatalogClient(productsCatalogServiceUrl);
 
             var genreModel = await productsCatalogClient.BrowseByGenreAsync(genre);
@@ -50,9 +50,9 @@ namespace MusicStore.Controllers
 
         public async Task<IActionResult> Details(int id)
         {
-            var serviceDiscoveryClient = new Services.ServiceDiscoveryClient(this.AppSettings.ServiceDiscoveryBaseUrl);
+            var serviceRegistry = new Services.ServiceRegistry();
 
-            string productsCatalogServiceUrl = await serviceDiscoveryClient.GetProductsCatalogServiceUrlAsync();
+            string productsCatalogServiceUrl = serviceRegistry.GetProductsCatalogServiceUrl();
             var productsCatalogClient = new Services.ProductsCatalogClient(productsCatalogServiceUrl);
 
             _logger.LogInformation("Service URL : {0}", productsCatalogServiceUrl);

@@ -13,18 +13,18 @@ namespace MusicStore.Controllers
     {
         [FromServices]
         public AppSettings AppSettings { get; set; }
+        
+        [FromServices]
+        public MusicStoreContext DbContext { get; set; }
 
         //
         // GET: /Home/
         public async Task<IActionResult> Index()
         {
-            var serviceDiscoveryClient = new Services.ServiceDiscoveryClient(this.AppSettings.ServiceDiscoveryBaseUrl);
-
-            string productsCatalogServiceUrl = await serviceDiscoveryClient.GetProductsCatalogServiceUrlAsync();
-            var productsCatalogClient = new Services.ProductsCatalogClient(productsCatalogServiceUrl);
+            var serviceRegistry = new Services.ServiceRegistry();
+            var productsCatalogClient = new Services.ProductsCatalogClient(serviceRegistry.GetProductsCatalogServiceUrl());
 
             var albums = await productsCatalogClient.GetTopSellingAlbumsAsync(6);
-
             return View(albums);
         }
 
