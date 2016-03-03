@@ -43,7 +43,8 @@
     "Microsoft.Extensions.Logging.Console": "1.0.0-rc1-final",
     "System.Data.SqlClient": "4.0.0-beta-23516",
     "System.Net.Security": "4.0.0-beta-23516",
-    "MusicStore.Models": "1.0.0-*"
+    "MusicStore.Models": "1.0.0-*",
+    "Microsoft.NETCore.Platforms":"1.0.1-*"
   },
   "commands": {
     "gen": "Microsoft.Extensions.CodeGeneration",

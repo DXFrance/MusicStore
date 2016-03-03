@@ -41,31 +41,25 @@ namespace MusicStore
                 return appSettings;
             });
 
-            //var useInMemoryStore = !_platform.IsRunningOnWindows
-            //    || _platform.IsRunningOnMono
-            //    || _platform.IsRunningOnNanoServer;
+            var useInMemoryStore = !_platform.IsRunningOnWindows
+               || _platform.IsRunningOnMono
+               || _platform.IsRunningOnNanoServer;
 
-            //// Add EF services to the services container
-            //if (useInMemoryStore)
-            //{
-            //    services.AddEntityFramework()
-            //            .AddInMemoryDatabase()
-            //            .AddDbContext<MusicStoreContext>(options =>
-            //                options.UseInMemoryDatabase());
-            //}
-            //else
-            //{
-            //    services.AddEntityFramework()
-            //            .AddSqlServer()
-            //            .AddDbContext<MusicStoreContext>(options =>
-            //                options.UseSqlServer(Configuration["Data:DefaultConnection:ConnectionString"]));
-            //}
-
-            // Add entity framework & sql server
-            services.AddEntityFramework()
-                        .AddSqlServer()
-                        .AddDbContext<MusicStoreContext>(options =>
-                            options.UseSqlServer(Configuration["Data:DefaultConnection:ConnectionString"]));
+            // Add EF services to the services container
+            if (useInMemoryStore)
+            {
+               services.AddEntityFramework()
+                       .AddInMemoryDatabase()
+                       .AddDbContext<MusicStoreContext>(options =>
+                           options.UseInMemoryDatabase());
+            }
+            else
+            {
+               services.AddEntityFramework()
+                       .AddSqlServer()
+                       .AddDbContext<MusicStoreContext>(options =>
+                           options.UseSqlServer(Configuration["Data:DefaultConnection:ConnectionString"]));
+            }
 
             // Add Identity services to the services container
             services.AddIdentity<ApplicationUser, IdentityRole>(options =>
@@ -206,7 +200,7 @@ namespace MusicStore
             });
 
             //Populates the MusicStore sample data
-            //SampleData.InitializeMusicStoreDatabaseAsync(app.ApplicationServices).Wait();
+            SampleData.InitializeMusicStoreDatabaseAsync(app.ApplicationServices).Wait();
         }
     }
 }
