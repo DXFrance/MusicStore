@@ -18,16 +18,13 @@ echo "Pushing images..."
 docker login --username="$2" --password="$3" --email="$4"
 
 echo "Pushing Catalog image..."
-docker push jcorioland/musicstore-catalog:latest
-docker push jcorioland/musicstore-catalog:$1
+docker push jcorioland/musicstore-catalog
 
 echo "Pushing Checkout image..."
-docker push jcorioland/musicstore-checkout:latest
-docker push jcorioland/musicstore-checkout:$1
+docker push jcorioland/musicstore-checkout
 
 echo "Pushing Front image..."
-docker push jcorioland/musicstore-front:latest
-docker push jcorioland/musicstore-front:$1
+docker push jcorioland/musicstore-front
 
 docker logout
 
