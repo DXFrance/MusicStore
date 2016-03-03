@@ -2,12 +2,13 @@ store:
   build: .
   dockerfile: Dockerfile.store
   ports:
-    - "5000:5000"
+    - "80:5000"
   links:
-    - checkout
     - catalog
+    - checkout
   environment:
     ASPNET_ENV: Development
+    
 checkout:
   build: .
   dockerfile: Dockerfile.checkout
@@ -15,6 +16,7 @@ checkout:
     - "5004:5004"
   environment:
     ASPNET_ENV: Development
+    
 catalog:
   build: .
   dockerfile: Dockerfile.catalog

@@ -5,8 +5,8 @@ store:
   ports:
     - '80:5000'
   links:
-    - checkout
     - catalog
+    - checkout
     
 catalog:
   image: 'jeanlaurent/ms_catalog:latest'
