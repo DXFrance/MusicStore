@@ -1,70 +1,29 @@
 version: '2'
 services:
   store:
-    build:
-      context: .
-      dockerfile: Dockerfile.store
+    image: 'jcorioland/musicstore-front:latest'
     ports:
       - "80:5000"
-    environment:
-      ASPNET_ENV: Development
     networks:
-      - net
+      - musicstore_network
     container_name: store
 
   checkout:
-    build:
-      context: .
-      dockerfile: Dockerfile.checkout
+    image: 'jcorioland/musicstore-checkout:latest'
     ports:
       - 5004
-    environment:
-      ASPNET_ENV: Development
     networks:
-      - net
+      - musicstore_network
     container_name: checkout
 
-  interlock:
-    image: ehazlett/interlock:1.0
-    command: run
-    ports:
-        - 8080
-    volumes:
-        - ./config.toml:/bin/config.toml
-        - ~/.docker/machine/machines/swarm-master:/certs
-        - ./haproxy:/etc
-    networks:
-      - net
-    container_name: interlock
-
-  haproxy:
-    image: haproxy:latest
-    depends_on:
-      - interlock
-    ports:
-        - "80:80"
-    labels:
-        - "interlock.ext.name=haproxy"
-    volumes:
-        - ./haproxy:/usr/local/etc/haproxy
-    networks:
-      - net
-    container_name: haproxy
-
   catalog:
-    build:
-      context: .
-      dockerfile: Dockerfile.catalog
+    image: 'jcorioland/musicstore-catalog:latest'
     ports:
       - 5003
-    environment:
-      ASPNET_ENV: Development
-    labels:
-        - "interlock.hostname=catalog"
-        - "interlock.domain=local"
     networks:
-      - net
-
+      - musicstore_network
+    container_name: catalog
+   
 networks:
-  net:
+  musicstore_network:
     driver: overlay
