@@ -1,7 +1,12 @@
 version: '2'
+
+networks:
+  musicstore_network:
+    driver: overlay
+    
 services:
   store:
-    image: 'jcorioland/musicstore-front:latest'
+    image: 'jcorioland/musicstore-front:1.1'
     ports:
       - "80:5000"
     networks:
@@ -9,7 +14,7 @@ services:
     container_name: store
 
   checkout:
-    image: 'jcorioland/musicstore-checkout:latest'
+    image: 'jcorioland/musicstore-checkout:1.1'
     ports:
       - 5004
     networks:
@@ -17,13 +22,9 @@ services:
     container_name: checkout
 
   catalog:
-    image: 'jcorioland/musicstore-catalog:latest'
+    image: 'jcorioland/musicstore-catalog:1.1'
     ports:
       - 5003
     networks:
       - musicstore_network
     container_name: catalog
-   
-networks:
-  musicstore_network:
-    driver: overlay
