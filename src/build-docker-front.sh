@@ -8,7 +8,7 @@ echo "Building MusicStore Front Docker Image"
 docker build -t jcorioland/musicstore-front -f Dockerfile.store .
 docker tag jcorioland/musicstore-front jcorioland/musicstore-front:$appVersion
 
-docker login --username="$2" --password="$3" --email="$4"
+docker login --username="$1" --password="$2" --email="$3"
 
 echo "Pushing Front image..."
 docker push jcorioland/musicstore-front:$appVersion

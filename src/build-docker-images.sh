@@ -19,7 +19,7 @@ docker tag jcorioland/musicstore-front jcorioland/musicstore-front:$appVersion
 echo "Done building images"
 echo "Pushing images..."
 
-docker login --username="$2" --password="$3" --email="$4"
+docker login --username="$1" --password="$2" --email="$3"
 
 echo "Pushing Catalog image..."
 docker push jcorioland/musicstore-catalog:$appVersion
