@@ -5,16 +5,13 @@ appVersion=$(cat MusicStore/project.json | jq -r '.version')
 echo "Building Docker images for MusicStore Version $appVersion"
 
 echo "Building MusicStore Catalog Docker Image"
-docker build -t jcorioland/musicstore-catalog -f Dockerfile.catalog .
-docker tag jcorioland/musicstore-catalog jcorioland/musicstore-catalog:$appVersion
+docker build -t jcorioland/musicstore-catalog:$appVersion -f Dockerfile.catalog .
 
 echo "Building MusicStore Checkout Docker Image"
-docker build -t jcorioland/musicstore-checkout -f Dockerfile.checkout .
-docker tag jcorioland/musicstore-checkout jcorioland/musicstore-checkout:$appVersion
+docker build -t jcorioland/musicstore-checkout:$appVersion -f Dockerfile.checkout .
 
 echo "Building MusicStore Front Docker Image"
-docker build -t jcorioland/musicstore-front -f Dockerfile.store .
-docker tag jcorioland/musicstore-front jcorioland/musicstore-front:$appVersion
+docker build -t jcorioland/musicstore-front:$appVersion -f Dockerfile.store .
 
 echo "Done building images"
 echo "Pushing images..."
