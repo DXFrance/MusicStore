@@ -6,7 +6,7 @@ networks:
     
 services:
   store:
-    image: 'jcorioland/musicstore-front:1.1'
+    image: 'jcorioland/musicstore-front:1.0.1'
     ports:
       - "80:5000"
     networks:
@@ -14,7 +14,7 @@ services:
     container_name: store
 
   checkout:
-    image: 'jcorioland/musicstore-checkout:1.1'
+    image: 'jcorioland/musicstore-checkout:1.0.1'
     ports:
       - 5004
     networks:
@@ -22,7 +22,7 @@ services:
     container_name: checkout
 
   catalog:
-    image: 'jcorioland/musicstore-catalog:1.1'
+    image: 'jcorioland/musicstore-catalog:1.0.1'
     ports:
       - 5003
     networks:
