@@ -7,6 +7,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using MusicStore.Components;
 using MusicStore.Models;
+using System.Reflection;
 
 namespace MusicStore
 {
