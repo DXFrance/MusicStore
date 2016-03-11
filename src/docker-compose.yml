@@ -6,7 +6,7 @@ networks:
     
 services:
   store:
-    image: 'jcorioland/musicstore-front:1.0.1'
+    image: 'jcorioland/musicstore-front:1.0.2'
     ports:
       - "80:5000"
     networks:
