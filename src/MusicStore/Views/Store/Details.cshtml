@@ -7,7 +7,7 @@
 <h2>@Model.Title</h2>
 
 <p>
-    <img alt="@Model.Title" src="@Url.Action("GetAlbumArt", "Store", new { artist = Model.Artist.Name, album = Model.Title })" />
+    <img class="img-thumbnail" alt="@Model.Title" src="@Url.Action("GetAlbumArt", "Store", new { artist = Model.Artist.Name, album = Model.Title })" />
 </p>
 
 <div id="album-details">

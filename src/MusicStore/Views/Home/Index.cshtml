@@ -13,7 +13,7 @@
     {
     <li class="col-lg-2 col-md-2 col-sm-2 col-xs-4 container">
         <a asp-controller="Store" asp-action="Details" asp-route-id="@album.AlbumId">
-            <img alt="@album.Title" src="@Url.Action("GetAlbumArt", "Store", new { artist = album.Artist.Name, album = album.Title })" />
+            <img class="img-thumbnail" alt="@album.Title" src="@Url.Action("GetAlbumArt", "Store", new { artist = album.Artist.Name, album = album.Title })" />
             <h4>@album.Title</h4>
         </a>
     </li>
