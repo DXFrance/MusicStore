@@ -10,7 +10,7 @@ namespace MusicStore.Components
         public async Task<IViewComponentResult> InvokeAsync(string artist, string album)
         {
             var httpClient = new System.Net.Http.HttpClient();
-            string url = string.Format("http://ws.audioscrobbler.com/2.0/?method=album.getinfo&api_key=189c353499a656b83ad16da81d3857c1&artist={0}&album={1}&format=json", artist, album);
+            string url = string.Format("http://ws.audioscrobbler.com/2.0/?method=album.getinfo&api_key=189c353499a656b83ad16da81d3857c1&artist={0}&album={1}&format=json", System.Uri.EscapeUriString(artist), System.Uri.EscapeUriString(album));
 
             var response = await httpClient.GetAsync(url);
 
@@ -22,7 +22,7 @@ namespace MusicStore.Components
             var jsonContent = await response.Content.ReadAsStringAsync();
             var getCoverResponse = Newtonsoft.Json.JsonConvert.DeserializeObject<GetCoverResponse>(jsonContent);
 
-            if (getCoverResponse != null && getCoverResponse.album != null && getCoverResponse.album.image != null && getCoverResponse.album.image.Any(i => i.size == "large"))
+            if (getCoverResponse != null && getCoverResponse.album != null && getCoverResponse.album.image != null && getCoverResponse.album.image.Any(i => i.size == "large" && !string.IsNullOrEmpty(i.text)))
             {
                 return View("Default", getCoverResponse.album.image.First(i => i.size == "large").text);
             }
