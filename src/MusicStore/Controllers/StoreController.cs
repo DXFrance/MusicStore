@@ -88,7 +88,7 @@ namespace MusicStore.Controllers
 
             if (string.IsNullOrEmpty(albumUrl))
             {
-                string defaultPath = System.IO.Path.Combine(_appEnvironment.ApplicationBasePath, "wwwroot\\Images\\placeholder.png");
+                string defaultPath = System.IO.Path.Combine(_appEnvironment.ApplicationBasePath, "wwwroot/Images/placeholder.png");
                 byte[] defaultArt = System.IO.File.ReadAllBytes(defaultPath);
 
                 return File(defaultArt, "image/png");
