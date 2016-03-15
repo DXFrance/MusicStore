@@ -31,7 +31,7 @@ namespace MusicStore.ProductsCatalogService.Controllers
             // Retrieve Genre genre and its Associated associated Albums albums from database
             var genreModel = await DbContext.Genres
                 .Include(g => g.Albums)
-                .Include("Albums.Artist")
+                .Include(g => g.Albums.Select(a => a.Artist))
                 .Where(g => g.Name == genre)
                 .FirstOrDefaultAsync();
 
