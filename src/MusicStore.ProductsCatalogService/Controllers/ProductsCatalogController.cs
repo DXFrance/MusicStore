@@ -77,6 +77,8 @@ namespace MusicStore.ProductsCatalogService.Controllers
         public async Task<IActionResult> GetTopSellingAlbumsAsync(int count)
         {
             var topAlbums = await DbContext.Albums
+                .Include(a => a.Artist)
+                .Include(a => a.Genre)
                 .OrderByDescending(a => a.OrderDetails.Count())
                 .Take(count)
                 .ToListAsync();
