@@ -43,6 +43,7 @@ namespace MusicStore.Components
 
     public class Image
     {
+        [Newtonsoft.Json.JsonProperty("#text")]
         public string text { get; set; }
         public string size { get; set; }
     }
