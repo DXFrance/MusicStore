@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNet.Mvc;
 using Microsoft.Data.Entity;
+using Microsoft.Data.Entity.Query;
 using Microsoft.Extensions.Caching.Memory;
 using MusicStore.Models;
 using System;
@@ -31,7 +32,6 @@ namespace MusicStore.ProductsCatalogService.Controllers
             // Retrieve Genre genre and its Associated associated Albums albums from database
             var genreModel = await DbContext.Genres
                 .Include(g => g.Albums)
-                .Include(g => g.Albums.Select(a => a.Artist))
                 .Where(g => g.Name == genre)
                 .FirstOrDefaultAsync();
 
@@ -39,6 +39,10 @@ namespace MusicStore.ProductsCatalogService.Controllers
             {
                 return HttpNotFound();
             }
+
+            // load artists
+            var artistItds = genreModel.Albums.Select(a => a.ArtistId).Distinct();
+            var artists = await DbContext.Artists.Where(a => artistItds.Contains(a.ArtistId)).ToListAsync();
 
             return Json(genreModel);
         }

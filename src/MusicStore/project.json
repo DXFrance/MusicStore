@@ -3,7 +3,7 @@
     "Microsoft"
   ],
   "description": "Music store application on ASP.NET 5",
-  "version": "1.0.6",
+  "version": "1.0.7",
   "compilationOptions": {
     "warningsAsErrors": true,
     "define": [
