@@ -7,7 +7,7 @@
 <h2>@Model.Title</h2>
 
 <p>
-    <img alt="@Model.Title" src="@await Component.InvokeAsync(Model.Artist.Name, Model.Title)" />
+    <img alt="@Model.Title" src="@await Component.InvokeAsync("AlbumCover", Model.Artist.Name, Model.Title)" />
 </p>
 
 <div id="album-details">
