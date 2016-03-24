@@ -1,0 +1,36 @@
+version: '2'
+
+networks:
+  musicstore_network:
+    driver: bridge
+    
+services:
+  store:
+    build:
+      context: .
+      dockerfile: Dockerfile.store
+    ports:
+      - "80:5000"
+    networks:
+      - musicstore_network
+    container_name: store
+
+  checkout:
+    build:
+      context: .
+      dockerfile: Dockerfile.checkout
+    ports:
+      - 5004
+    networks:
+      - musicstore_network
+    container_name: checkout
+
+  catalog:
+    build:
+      context: .
+      dockerfile: Dockerfile.catalog
+    ports:
+      - 5003
+    networks:
+      - musicstore_network
+    container_name: catalog
