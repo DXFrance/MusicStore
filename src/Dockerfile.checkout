@@ -3,16 +3,11 @@ FROM microsoft/aspnet:1.0.0-rc1-update1-coreclr
 EXPOSE 5004
 ENTRYPOINT ["dnx", "web"]
 
-WORKDIR /app/MusicStore.Models
-COPY MusicStore.Models/project.json .
-RUN dnu restore
+ADD MusicStore.Models/ ./app/MusicStore.Models
+ADD MusicStore.CheckoutService/ ./app/MusicStore.CheckoutService
 
-ADD MusicStore.Models/ ./
-RUN dnu build
+WORKDIR /app/MusicStore.Models
+RUN dnu restore
 
 WORKDIR /app/MusicStore.CheckoutService
-COPY MusicStore.CheckoutService/project.json .
 RUN dnu restore
-
-ADD MusicStore.CheckoutService/ ./
-RUN dnu build
